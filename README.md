@@ -33,9 +33,3 @@ npm run dev
 ```
 
 Open your browser and go to http://localhost:5002 to see the "Hello World" message.
-Usage
-The project includes an example auth service. Here's how you can use it:
-
-Send a GET request to /auth/login endpoint.
-You will receive a JSON response with a "Login" message.
-Feel free to modify the auth service and other parts of the project according to your requirements.
