@@ -16,6 +16,7 @@ These instructions will help you run the project on your local machine.
 ```bash
 git clone https://github.com/goktugcy/ExpressTS-Boilerplate.git
 ```
+
 ```bash 
 Navigate to the project folder: cd ExpressTS-Boilerplate
 ```
@@ -26,9 +27,7 @@ Install the required dependencies:
 npm install
 ```
 
-Start the project: ```bash 
-
-npm run dev ```
+Start the project: ``` npm run dev ```
 
 Open your browser and go to http://localhost:5002 to see the "Hello World" message.
 Usage
