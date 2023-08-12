@@ -27,7 +27,10 @@ Install the required dependencies:
 npm install
 ```
 
-Start the project: ``` npm run dev ```
+Start the project: 
+```bash
+npm run dev
+```
 
 Open your browser and go to http://localhost:5002 to see the "Hello World" message.
 Usage
