@@ -17,7 +17,8 @@ These instructions will help you run the project on your local machine.
 git clone https://github.com/goktugcy/ExpressTS-Boilerplate.git
 ```
 ```bash 
-Navigate to the project folder: cd ExpressTS-Boilerplate ``` 
+Navigate to the project folder: cd ExpressTS-Boilerplate
+```
 
 Install the required dependencies:
 
