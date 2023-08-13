@@ -5,7 +5,8 @@ This project is a basic template built using Express.js and TypeScript. It inclu
 - Usage of Express.js
 - Development with TypeScript
 - Modular route structures
-
+- Example of a basic auth service
+  
 ## Getting Started
 
 These instructions will help you run the project on your local machine.
