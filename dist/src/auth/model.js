@@ -23,11 +23,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.PasswordReset = exports.User = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const userSchema = new mongoose_1.Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }
 }, { timestamps: true });
+const passwordResetSchema = new mongoose_1.Schema({
+    email: { type: String, required: true },
+    token: { type: String, required: true },
+    expiration: { type: Date, required: true }
+}, { timestamps: true });
 const User = mongoose_1.default.model('User', userSchema);
-exports.default = User;
+exports.User = User;
+const PasswordReset = mongoose_1.default.model('password_reset', passwordResetSchema);
+exports.PasswordReset = PasswordReset;

@@ -8,6 +8,12 @@ interface User extends Document {
   updatedAt: Date
 }
 
+interface PasswordReset extends Document {
+  email: string
+  token: string
+  expiration: Date
+}
+
 const userSchema = new Schema<User>(
   {
     username: { type: String, required: true, unique: true },
@@ -17,6 +23,16 @@ const userSchema = new Schema<User>(
   { timestamps: true }
 )
 
-const User = mongoose.model<User>('User', userSchema)
+const passwordResetSchema = new Schema<PasswordReset>(
+  {
+    email: { type: String, required: true },
+    token: { type: String, required: true },
+    expiration: { type: Date, required: true }
+  },
+  { timestamps: true }
+)
 
-export default User
+const User = mongoose.model<User>('User', userSchema)
+const PasswordReset = mongoose.model<PasswordReset>('password_reset', passwordResetSchema)
+
+export { User, PasswordReset }

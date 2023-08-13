@@ -22,6 +22,8 @@ const createRoutes = () => __awaiter(void 0, void 0, void 0, function* () {
     // Auth routes
     router.post('/login', controller_1.authService.login);
     router.post('/register', controller_1.authService.register);
+    router.post('/forgot-password', controller_1.authService.forgotPassword);
+    router.post('/reset-password', controller_1.authService.resetPassword);
     router.get('/blogs', controller_2.blogService.blog);
     router.get('/blogs/:id', controller_2.blogService.show);
     router.post('/blogs', middleware_1.authenticateMiddleware, controller_2.blogService.create);
