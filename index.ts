@@ -1,16 +1,18 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import { createRoutes } from './src/server/routes'
+import connectDB from './src/server/db'
 
 const app = express()
 dotenv.config()
+app.use(express.json())
 
 const host = process.env.HOST || 'localhost'
 const port = process.env.PORT || 5002
 
-const router = createRoutes()
+connectDB()
 
-router
+createRoutes()
   .then((routes) => {
     app.use(routes)
   })

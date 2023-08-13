@@ -25,17 +25,17 @@ exports.authService = {
         try {
             const user = yield model_1.default.findOne({ username });
             if (!user) {
-                return res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+                return res.status(404).json({ message: 'User not found' });
             }
             const passwordMatch = yield bcrypt_1.default.compare(password, user.password);
             if (!passwordMatch) {
-                return res.status(401).json({ message: 'Hatalı şifre' });
+                return res.status(401).json({ message: 'Wrong password' });
             }
             const token = jsonwebtoken_1.default.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
             res.json({ token });
         }
         catch (error) {
-            res.status(500).json({ message: 'Sunucu hatası' });
+            res.status(500).json({ message: 'Something went wrong', error });
         }
     }),
     register: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -47,13 +47,12 @@ exports.authService = {
                 email,
                 password: hashedPassword
             });
-            // Veritabanına kaydet
             yield newUser.save();
-            return res.json({ message: 'Kullanıcı kaydı başarılı.' });
+            return res.json({ message: 'User successfully created' });
         }
         catch (error) {
-            console.error('Kullanıcı kaydı hatası:', error);
-            return res.status(500).json({ message: 'Bir hata oluştu.' });
+            console.error('Error creating user:', error);
+            return res.status(500).json({ message: 'Something went wrong', error });
         }
     })
 };

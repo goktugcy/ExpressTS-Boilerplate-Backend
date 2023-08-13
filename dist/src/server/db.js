@@ -12,13 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createRoutes = void 0;
-const express_1 = __importDefault(require("express"));
-const controller_1 = require("../auth/controller");
-const createRoutes = () => __awaiter(void 0, void 0, void 0, function* () {
-    const router = express_1.default.Router();
-    router.post('/login', controller_1.authService.login);
-    router.post('/register', controller_1.authService.register);
-    return router;
+const mongoose_1 = __importDefault(require("mongoose"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield mongoose_1.default.connect(`${process.env.MONGO_URI}`);
+        console.log('MongoDB Connected');
+    }
+    catch (error) {
+        console.error('Error connecting to MongoDB:', error);
+    }
 });
-exports.createRoutes = createRoutes;
+exports.default = connectDB;

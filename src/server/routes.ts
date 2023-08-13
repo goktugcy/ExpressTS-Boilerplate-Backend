@@ -1,10 +1,11 @@
 import express from 'express'
-import { authService } from '../auth/service'
+import { authService } from '../auth/controller'
 
 export const createRoutes = async () => {
   const router = express.Router()
 
-  router.get('/login', authService.login)
+  router.post('/login', authService.login)
+  router.post('/register', authService.register)
 
   return router
 }

@@ -6,12 +6,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const routes_1 = require("./src/server/routes");
+const db_1 = __importDefault(require("./src/server/db"));
 const app = (0, express_1.default)();
 dotenv_1.default.config();
+app.use(express_1.default.json());
 const host = process.env.HOST || 'localhost';
 const port = process.env.PORT || 5002;
-const router = (0, routes_1.createRoutes)();
-router
+(0, db_1.default)();
+(0, routes_1.createRoutes)()
     .then((routes) => {
     app.use(routes);
 })
