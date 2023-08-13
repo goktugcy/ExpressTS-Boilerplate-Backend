@@ -19,9 +19,14 @@ const controller_2 = require("../blog/controller");
 const middleware_1 = require("../auth/middleware");
 const createRoutes = () => __awaiter(void 0, void 0, void 0, function* () {
     const router = express_1.default.Router();
+    // Auth routes
     router.post('/login', controller_1.authService.login);
     router.post('/register', controller_1.authService.register);
-    router.get('/blogs', middleware_1.authenticateMiddleware, controller_2.blogService.blogs);
+    router.get('/blogs', controller_2.blogService.blog);
+    router.get('/blogs/:id', controller_2.blogService.show);
+    router.post('/blogs', middleware_1.authenticateMiddleware, controller_2.blogService.create);
+    router.put('/blogs/:id', middleware_1.authenticateMiddleware, controller_2.blogService.update);
+    router.delete('/blogs/:id', middleware_1.authenticateMiddleware, controller_2.blogService.destroy);
     return router;
 });
 exports.createRoutes = createRoutes;
