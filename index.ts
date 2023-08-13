@@ -1,7 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import { createRoutes } from './src/server/routes'
-import connectDB from './src/server/db'
+import connectDB from './src/database/mongodb'
 
 const app = express()
 dotenv.config()
