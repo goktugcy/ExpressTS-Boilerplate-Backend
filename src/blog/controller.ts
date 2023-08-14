@@ -1,14 +1,22 @@
-import express from 'express'
+import { RequestHandler } from 'express'
 import Blog from './model'
 import mongoose from 'mongoose'
 
-export const blogService = {
-  blog: async (req: express.Request, res: express.Response) => {
+interface IBlogService {
+  blog: RequestHandler
+  show: RequestHandler
+  create: RequestHandler
+  update: RequestHandler
+  destroy: RequestHandler
+}
+
+class BlogService implements IBlogService {
+  blog: RequestHandler = async (req, res) => {
     const blogs = await Blog.find().sort({ createdAt: -1 })
     return res.json(blogs)
-  },
+  }
 
-  show: async (req: express.Request, res: express.Response) => {
+  show: RequestHandler = async (req, res) => {
     try {
       const blogId = req.params.id
 
@@ -27,9 +35,9 @@ export const blogService = {
       console.error('Error showing blog:', error)
       return res.status(500).json({ message: 'Something went wrong', error })
     }
-  },
+  }
 
-  create: async (req: express.Request, res: express.Response) => {
+  create: RequestHandler = async (req, res) => {
     const { title, description, content } = req.body
     try {
       const existingBlog = await Blog.findOne({ title })
@@ -51,9 +59,9 @@ export const blogService = {
       console.error('Error creating blog:', error)
       return res.status(500).json({ message: 'Something went wrong', error })
     }
-  },
+  }
 
-  update: async (req: express.Request, res: express.Response) => {
+  update: RequestHandler = async (req, res) => {
     const blogId = req.params.id
     const { title, description, content } = req.body
 
@@ -73,9 +81,9 @@ export const blogService = {
       console.error('Error updating blog:', error)
       return res.status(500).json({ message: 'Something went wrong', error })
     }
-  },
+  }
 
-  destroy: async (req: express.Request, res: express.Response) => {
+  destroy: RequestHandler = async (req, res) => {
     const blogId = req.params.id
 
     try {
@@ -96,3 +104,5 @@ export const blogService = {
     }
   }
 }
+
+export const blogService = new BlogService()

@@ -1,4 +1,4 @@
-import { Response, Request } from 'express'
+import { RequestHandler } from 'express'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
@@ -9,8 +9,15 @@ dotenv.config()
 
 const secretKey = process.env.SECRET_KEY as string
 
-export const authService = {
-  login: async (req: Request, res: Response) => {
+interface IAuthService {
+  login: RequestHandler
+  register: RequestHandler
+  forgotPassword: RequestHandler
+  resetPassword: RequestHandler
+}
+
+class AuthService implements IAuthService {
+  login: RequestHandler = async (req, res) => {
     const { username, password } = req.body
     try {
       const user = await User.findOne({ username })
@@ -31,9 +38,9 @@ export const authService = {
     } catch (error) {
       res.status(500).json({ message: 'Something went wrong', error })
     }
-  },
+  }
 
-  register: async (req: Request, res: Response) => {
+  register: RequestHandler = async (req, res) => {
     const { username, email, password } = req.body
 
     try {
@@ -51,9 +58,9 @@ export const authService = {
       console.error('Error creating user:', error)
       return res.status(500).json({ message: 'Something went wrong', error })
     }
-  },
+  }
 
-  forgotPassword: async (req: Request, res: Response) => {
+  forgotPassword: RequestHandler = async (req, res) => {
     const { email } = req.body
 
     try {
@@ -80,9 +87,9 @@ export const authService = {
       console.error('Error sending password reset email:', error)
       return res.status(500).json({ message: 'Something went wrong', error })
     }
-  },
+  }
 
-  resetPassword: async (req: Request, res: Response) => {
+  resetPassword: RequestHandler = async (req, res) => {
     const { email, token, newPassword } = req.body
 
     try {
@@ -128,6 +135,8 @@ function generateResetToken() {
 
   return token
 }
+
+export const authService = new AuthService()
 
 function sendPasswordResetEmail(email: string, resetToken: string) {
   const transporter = nodemailer.createTransport({

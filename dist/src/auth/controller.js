@@ -20,90 +20,92 @@ const model_1 = require("./model");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 dotenv_1.default.config();
 const secretKey = process.env.SECRET_KEY;
-exports.authService = {
-    login: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { username, password } = req.body;
-        try {
-            const user = yield model_1.User.findOne({ username });
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+class AuthService {
+    constructor() {
+        this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { username, password } = req.body;
+            try {
+                const user = yield model_1.User.findOne({ username });
+                if (!user) {
+                    return res.status(404).json({ message: 'User not found' });
+                }
+                const passwordMatch = yield bcrypt_1.default.compare(password, user.password);
+                if (!passwordMatch) {
+                    return res.status(401).json({ message: 'Wrong password' });
+                }
+                const token = jsonwebtoken_1.default.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
+                res.json({ token });
             }
-            const passwordMatch = yield bcrypt_1.default.compare(password, user.password);
-            if (!passwordMatch) {
-                return res.status(401).json({ message: 'Wrong password' });
+            catch (error) {
+                res.status(500).json({ message: 'Something went wrong', error });
             }
-            const token = jsonwebtoken_1.default.sign({ userId: user._id }, secretKey, { expiresIn: '1h' });
-            res.json({ token });
-        }
-        catch (error) {
-            res.status(500).json({ message: 'Something went wrong', error });
-        }
-    }),
-    register: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { username, email, password } = req.body;
-        try {
-            const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-            const newUser = new model_1.User({
-                username,
-                email,
-                password: hashedPassword
-            });
-            yield newUser.save();
-            return res.json({ message: 'User successfully created' });
-        }
-        catch (error) {
-            console.error('Error creating user:', error);
-            return res.status(500).json({ message: 'Something went wrong', error });
-        }
-    }),
-    forgotPassword: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { email } = req.body;
-        try {
-            const user = yield model_1.User.findOne({ email });
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+        });
+        this.register = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { username, email, password } = req.body;
+            try {
+                const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+                const newUser = new model_1.User({
+                    username,
+                    email,
+                    password: hashedPassword
+                });
+                yield newUser.save();
+                return res.json({ message: 'User successfully created' });
             }
-            const resetToken = generateResetToken();
-            const passwordReset = new model_1.PasswordReset({
-                email,
-                token: resetToken,
-                expiration: new Date(Date.now() + 3600000) // 1 saat
-            });
-            yield passwordReset.save();
-            sendPasswordResetEmail(email, resetToken);
-            return res.json({ message: 'Password reset email sent' });
-        }
-        catch (error) {
-            console.error('Error sending password reset email:', error);
-            return res.status(500).json({ message: 'Something went wrong', error });
-        }
-    }),
-    resetPassword: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const { email, token, newPassword } = req.body;
-        try {
-            const passwordReset = yield model_1.PasswordReset.findOne({
-                email,
-                token,
-                expiration: { $gt: new Date() }
-            });
-            if (!passwordReset) {
-                return res.status(400).json({ message: 'Invalid reset token or token expired' });
+            catch (error) {
+                console.error('Error creating user:', error);
+                return res.status(500).json({ message: 'Something went wrong', error });
             }
-            const user = yield model_1.User.findOne({ email });
-            if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+        });
+        this.forgotPassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { email } = req.body;
+            try {
+                const user = yield model_1.User.findOne({ email });
+                if (!user) {
+                    return res.status(404).json({ message: 'User not found' });
+                }
+                const resetToken = generateResetToken();
+                const passwordReset = new model_1.PasswordReset({
+                    email,
+                    token: resetToken,
+                    expiration: new Date(Date.now() + 3600000) // 1 saat
+                });
+                yield passwordReset.save();
+                sendPasswordResetEmail(email, resetToken);
+                return res.json({ message: 'Password reset email sent' });
             }
-            user.password = yield bcrypt_1.default.hash(newPassword, 10);
-            yield user.save();
-            yield passwordReset.deleteOne();
-            return res.json({ message: 'Password reset successful' });
-        }
-        catch (error) {
-            console.error('Error resetting password:', error);
-            return res.status(500).json({ message: 'Something went wrong', error });
-        }
-    })
-};
+            catch (error) {
+                console.error('Error sending password reset email:', error);
+                return res.status(500).json({ message: 'Something went wrong', error });
+            }
+        });
+        this.resetPassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const { email, token, newPassword } = req.body;
+            try {
+                const passwordReset = yield model_1.PasswordReset.findOne({
+                    email,
+                    token,
+                    expiration: { $gt: new Date() }
+                });
+                if (!passwordReset) {
+                    return res.status(400).json({ message: 'Invalid reset token or token expired' });
+                }
+                const user = yield model_1.User.findOne({ email });
+                if (!user) {
+                    return res.status(404).json({ message: 'User not found' });
+                }
+                user.password = yield bcrypt_1.default.hash(newPassword, 10);
+                yield user.save();
+                yield passwordReset.deleteOne();
+                return res.json({ message: 'Password reset successful' });
+            }
+            catch (error) {
+                console.error('Error resetting password:', error);
+                return res.status(500).json({ message: 'Something went wrong', error });
+            }
+        });
+    }
+}
 function generateResetToken() {
     const tokenLength = 40;
     const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -114,6 +116,7 @@ function generateResetToken() {
     }
     return token;
 }
+exports.authService = new AuthService();
 function sendPasswordResetEmail(email, resetToken) {
     const transporter = nodemailer_1.default.createTransport({
         host: process.env.EMAIL_HOST,
