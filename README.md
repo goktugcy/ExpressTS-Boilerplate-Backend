@@ -54,4 +54,5 @@ The example authentication system in this boilerplate demonstrates the basic flo
 2. **Login**: The `/login` endpoint in `routes.ts` handles user logins. It checks the provided credentials against the stored hashed password and issues a JSON Web Token (JWT) upon successful login.
 
 3. **Protected Routes**: The boilerplate includes of a protected routes that requires authentication. The `authenticateMiddleware` middleware is applied to this route to ensure that only authenticated users can access it. If a user is not authenticated, they will receive a 401 Unauthorized response.
+
  
