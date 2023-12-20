@@ -11,7 +11,7 @@ const app = (0, express_1.default)();
 dotenv_1.default.config();
 app.use(express_1.default.json());
 const host = process.env.HOST || 'localhost';
-const port = process.env.PORT || 5002;
+const port = process.env.PORT || 3000;
 (0, mongodb_1.default)();
 (0, routes_1.createRoutes)()
     .then((routes) => {

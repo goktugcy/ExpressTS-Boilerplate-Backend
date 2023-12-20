@@ -1,46 +1,7 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose from 'mongoose'
+import { userSchema, passwordResetSchema } from './schema'
 
-interface User extends Document {
-  username: string
-  email: string
-  password: string
-  phone: string
-  createdAt: Date
-  updatedAt: Date
-}
+const User = mongoose.model('User', userSchema)
+const PasswordReset = mongoose.model('PasswordReset', passwordResetSchema)
 
-interface Register extends Document {
-  username: string
-  email: string
-  password: string
-  phone: string
-}
-
-interface PasswordReset extends Document {
-  email: string
-  token: string
-  expiration: Date
-}
-
-const userSchema = new Schema<User>(
-  {
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }
-  },
-  { timestamps: true }
-)
-
-const passwordResetSchema = new Schema<PasswordReset>(
-  {
-    email: { type: String, required: true },
-    token: { type: String, required: true },
-    expiration: { type: Date, required: true }
-  },
-  { timestamps: true }
-)
-
-const User = mongoose.model<User>('User', userSchema)
-const PasswordReset = mongoose.model<PasswordReset>('password_reset', passwordResetSchema)
-
-export { User, PasswordReset, Register }
+export { User, PasswordReset }

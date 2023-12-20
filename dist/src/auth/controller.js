@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authService = void 0;
+exports.authService = exports.registerValidation = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -22,6 +22,12 @@ const mongodb_1 = require("mongodb");
 const express_validator_1 = require("express-validator");
 dotenv_1.default.config();
 const secretKey = process.env.SECRET_KEY;
+exports.registerValidation = [
+    (0, express_validator_1.body)('username').notEmpty().withMessage('Username is required'),
+    (0, express_validator_1.body)('email').isEmail().withMessage('Email is required'),
+    (0, express_validator_1.body)('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    (0, express_validator_1.body)('phone').isMobilePhone('tr-TR').withMessage('Phone number is required')
+];
 class AuthService {
     constructor() {
         this.login = (req, res) => __awaiter(this, void 0, void 0, function* () {

@@ -8,7 +8,7 @@ dotenv.config()
 app.use(express.json())
 
 const host = process.env.HOST || 'localhost'
-const port = process.env.PORT || 5002
+const port = process.env.PORT || 3000
 
 connectDB()
 
