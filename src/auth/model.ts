@@ -4,8 +4,16 @@ interface User extends Document {
   username: string
   email: string
   password: string
+  phone: string
   createdAt: Date
   updatedAt: Date
+}
+
+interface Register extends Document {
+  username: string
+  email: string
+  password: string
+  phone: string
 }
 
 interface PasswordReset extends Document {
@@ -35,4 +43,4 @@ const passwordResetSchema = new Schema<PasswordReset>(
 const User = mongoose.model<User>('User', userSchema)
 const PasswordReset = mongoose.model<PasswordReset>('password_reset', passwordResetSchema)
 
-export { User, PasswordReset }
+export { User, PasswordReset, Register }

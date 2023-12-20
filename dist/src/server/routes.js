@@ -21,7 +21,7 @@ const createRoutes = () => __awaiter(void 0, void 0, void 0, function* () {
     const router = express_1.default.Router();
     // Auth routes
     router.post('/login', controller_1.authService.login);
-    router.post('/register', controller_1.authService.register);
+    router.post('/register', middleware_1.registerValidation, controller_1.authService.register);
     router.post('/forgot-password', controller_1.authService.forgotPassword);
     router.post('/reset-password', controller_1.authService.resetPassword);
     router.get('/blogs', controller_2.blogService.blog);

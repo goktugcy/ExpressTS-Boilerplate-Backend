@@ -1,14 +1,14 @@
 import express from 'express'
 import { authService } from '../auth/controller'
 import { blogService } from '../blog/controller'
-import { authenticateMiddleware } from '../auth/middleware'
+import { authenticateMiddleware, registerValidation } from '../auth/middleware'
 
 export const createRoutes = async () => {
   const router = express.Router()
 
   // Auth routes
   router.post('/login', authService.login)
-  router.post('/register', authService.register)
+  router.post('/register', registerValidation, authService.register)
   router.post('/forgot-password', authService.forgotPassword)
   router.post('/reset-password', authService.resetPassword)
 

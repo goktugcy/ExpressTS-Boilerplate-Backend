@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
 import { User, PasswordReset } from './model'
 import nodemailer from 'nodemailer'
+import { MongoError } from 'mongodb'
+import { validationResult } from 'express-validator'
 
 dotenv.config()
 
@@ -41,20 +43,28 @@ class AuthService implements IAuthService {
   }
 
   register: RequestHandler = async (req, res) => {
-    const { username, email, password } = req.body
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+
+    const { username, email, password, phone } = req.body
 
     try {
       const hashedPassword = await bcrypt.hash(password, 10)
-
       const newUser = new User({
         username,
         email,
-        password: hashedPassword
-      }) as User
-      await newUser.save()
+        password: hashedPassword,
+        phone
+      })
 
+      await newUser.save()
       return res.json({ message: 'User successfully created' })
     } catch (error) {
+      if (error instanceof MongoError && error.code === 11000) {
+        return res.status(400).json({ message: 'User already registered' })
+      }
       console.error('Error creating user:', error)
       return res.status(500).json({ message: 'Something went wrong', error })
     }

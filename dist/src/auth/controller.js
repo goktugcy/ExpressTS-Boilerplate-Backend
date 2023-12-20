@@ -18,6 +18,8 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const model_1 = require("./model");
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const mongodb_1 = require("mongodb");
+const express_validator_1 = require("express-validator");
 dotenv_1.default.config();
 const secretKey = process.env.SECRET_KEY;
 class AuthService {
@@ -41,18 +43,26 @@ class AuthService {
             }
         });
         this.register = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const { username, email, password } = req.body;
+            const errors = (0, express_validator_1.validationResult)(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
+            const { username, email, password, phone } = req.body;
             try {
                 const hashedPassword = yield bcrypt_1.default.hash(password, 10);
                 const newUser = new model_1.User({
                     username,
                     email,
-                    password: hashedPassword
+                    password: hashedPassword,
+                    phone
                 });
                 yield newUser.save();
                 return res.json({ message: 'User successfully created' });
             }
             catch (error) {
+                if (error instanceof mongodb_1.MongoError && error.code === 11000) {
+                    return res.status(400).json({ message: 'User already registered' });
+                }
                 console.error('Error creating user:', error);
                 return res.status(500).json({ message: 'Something went wrong', error });
             }
