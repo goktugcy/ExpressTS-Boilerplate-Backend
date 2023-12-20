@@ -6,6 +6,7 @@ This project is a basic template built using Express.js and TypeScript. It inclu
 - Development with TypeScript
 - Modular route structures
 - Example of a basic auth service
+- MongoDB integration
 
 ## Getting Started
 
