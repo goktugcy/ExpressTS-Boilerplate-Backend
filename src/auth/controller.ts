@@ -2,10 +2,11 @@ import { RequestHandler } from 'express'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import dotenv from 'dotenv'
-import { User, PasswordReset } from './model'
+import { User, PasswordReset, Session } from './model'
 import nodemailer from 'nodemailer'
 import { MongoError } from 'mongodb'
 import { body, validationResult } from 'express-validator'
+import { getUserId } from './middleware'
 
 dotenv.config()
 
@@ -40,8 +41,8 @@ class AuthService implements IAuthService {
         return res.status(401).json({ message: 'Wrong password' })
       }
 
-      const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' })
-
+      const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1m' })
+      await Session.findOneAndUpdate({ userId: user._id }, { token }, { upsert: true })
       res.json({ token, user })
     } catch (error) {
       res.status(500).json({ message: 'Something went wrong', error })
@@ -134,6 +135,23 @@ class AuthService implements IAuthService {
       return res.json({ message: 'Password reset successful' })
     } catch (error) {
       console.error('Error resetting password:', error)
+      return res.status(500).json({ message: 'Something went wrong', error })
+    }
+  }
+
+  logout: RequestHandler = async (req, res) => {
+    try {
+      const userId = getUserId(req)
+
+      if (!userId) {
+        return res.status(401).json({ message: 'User not identified' })
+      }
+
+      await Session.deleteOne({ userId })
+
+      res.json({ message: 'Logout successful' })
+    } catch (error) {
+      console.error('Error logging out:', error)
       return res.status(500).json({ message: 'Something went wrong', error })
     }
   }

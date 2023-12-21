@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 export const userSchema = new Schema(
   {
@@ -18,3 +18,9 @@ export const passwordResetSchema = new Schema(
   },
   { timestamps: true }
 )
+
+export const sessionSchema = new Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  token: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now, expires: 3600 }
+})

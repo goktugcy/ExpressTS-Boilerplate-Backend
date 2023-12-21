@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import { Session } from './model'
 
 dotenv.config()
 
-export const authenticateMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const authenticateMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(' ')[1]
 
   if (!token) {
@@ -12,8 +13,13 @@ export const authenticateMiddleware = (req: Request, res: Response, next: NextFu
   }
 
   try {
-    const decodedToken = jwt.verify(token, process.env.SECRET_KEY as string)
-    req.body.user = decodedToken as unknown
+    const decodedToken = jwt.verify(token, process.env.SECRET_KEY as string) as JwtPayload
+    const session = await Session.findOne({ userId: decodedToken.userId, token })
+
+    if (!session) {
+      return res.status(401).json({ message: 'Session not found or token mismatch' })
+    }
+
     next()
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
