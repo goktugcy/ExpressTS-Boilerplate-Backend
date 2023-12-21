@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -23,5 +23,18 @@ export const authenticateMiddleware = (req: Request, res: Response, next: NextFu
     }
 
     return res.status(401).json({ message: 'Unauthorized', error })
+  }
+}
+
+export const getUserId = (req: Request): string | null => {
+  const token = req.headers.authorization?.split(' ')[1]
+  if (!token) return null
+
+  try {
+    const decodedToken = jwt.verify(token, process.env.SECRET_KEY as string) as JwtPayload & { userId: string }
+    return decodedToken.userId
+  } catch (error) {
+    // Hata işleme
+    return null
   }
 }

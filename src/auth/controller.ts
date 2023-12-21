@@ -42,7 +42,7 @@ class AuthService implements IAuthService {
 
       const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' })
 
-      res.json({ token })
+      res.json({ token, user })
     } catch (error) {
       res.status(500).json({ message: 'Something went wrong', error })
     }
