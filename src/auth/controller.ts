@@ -132,6 +132,8 @@ class AuthService implements IAuthService {
 
       await passwordReset.deleteOne()
 
+      await Session.deleteOne({ userId: user._id })
+
       return res.json({ message: 'Password reset successful' })
     } catch (error) {
       console.error('Error resetting password:', error)
