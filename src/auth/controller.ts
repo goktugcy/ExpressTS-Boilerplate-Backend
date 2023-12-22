@@ -41,7 +41,7 @@ class AuthService implements IAuthService {
         return res.status(401).json({ message: 'Wrong password' })
       }
 
-      const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1m' })
+      const token = jwt.sign({ userId: user._id }, secretKey, { expiresIn: '1h' })
       await Session.findOneAndUpdate({ userId: user._id }, { token }, { upsert: true })
       res.json({ token, user })
     } catch (error) {

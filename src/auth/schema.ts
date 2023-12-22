@@ -22,5 +22,5 @@ export const passwordResetSchema = new Schema(
 export const sessionSchema = new Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   token: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now, expires: 3600 }
+  createdAt: { type: Date, default: Date.now }
 })

@@ -23,6 +23,8 @@ export const authenticateMiddleware = async (req: Request, res: Response, next: 
     next()
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
+      const decodedToken = jwt.decode(token) as JwtPayload
+      await Session.deleteOne({ userId: decodedToken.userId, token })
       return res.status(401).json({ message: 'Token expired' })
     } else if (error instanceof jwt.JsonWebTokenError) {
       return res.status(401).json({ message: 'Invalid token' })
