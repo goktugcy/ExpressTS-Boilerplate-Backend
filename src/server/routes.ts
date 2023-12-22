@@ -8,6 +8,7 @@ export const createRoutes = async () => {
   const router = express.Router()
 
   router.post('/login', authService.login)
+  router.post('/logout', authenticateMiddleware, authService.logout)
   router.post('/register', registerValidation, authService.register)
   router.post('/forgot-password', authService.forgotPassword)
   router.post('/reset-password', authService.resetPassword)
