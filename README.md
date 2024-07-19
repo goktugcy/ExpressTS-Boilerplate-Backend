@@ -28,6 +28,17 @@ Install the required dependencies:
 npm install
 ```
 
+Go to https://goktugceyhan.dev/playground or https://playcode.io/javascript and create a random value by pasting the code below. Then add this generated value to the SECRET_KEY field in your env file.
+```javascript
+ function generateSecureHexString(size) {
+      const array = new Uint8Array(size / 2);
+      window.crypto.getRandomValues(array);
+      return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase();
+    }
+
+    const hexString = generateSecureHexString(45);
+    console.log('Generated Secure Hex String:', hexString);
+```
 Start the project:
 
 ```bash
