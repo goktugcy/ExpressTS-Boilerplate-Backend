@@ -45,7 +45,7 @@ Start the project:
 npm run dev
 ```
 
-Open your browser and go to http://localhost:5002 to see the "Hello World" message.
+Open your browser and go to http://localhost:8003 to see the "Hello World" message.
 
 ## Routes and Authentication
 
