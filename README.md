@@ -67,4 +67,7 @@ The example authentication system in this boilerplate demonstrates the basic flo
 
 3. **Protected Routes**: The boilerplate includes of a protected routes that requires authentication. The `authenticateMiddleware` middleware is applied to this route to ensure that only authenticated users can access it. If a user is not authenticated, they will receive a 401 Unauthorized response.
 
- 
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
+
