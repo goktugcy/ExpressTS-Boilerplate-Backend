@@ -1,4 +1,10 @@
 # ExpressTS Boilerplate
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/goktugcy/ExpressTS-Boilerplate-Backend/blob/main/LICENSE)
+![GitHub forks](https://img.shields.io/github/forks/goktugcy/ExpressTS-Boilerplate-Backend?style=flat)
+![GitHub Created At](https://img.shields.io/github/created-at/goktugcy/ExpressTS-Boilerplate-Backend)
+![GitHub Repo stars](https://img.shields.io/github/stars/goktugcy/ExpressTS-Boilerplate-Backend?style=flat)
+
 
 This project is a basic template built using Express.js and TypeScript. It includes the following features:
 
