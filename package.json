@@ -1,7 +1,7 @@
 {
   "name": "expresstype",
   "version": "1.0.0",
-  "description": "",
+  "description": "This project is a basic backend template built using Express.js and TypeScript.",
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
@@ -11,9 +11,17 @@
     "format": "eslint src/**/*.ts --fix",
     "prettier": "prettier --write \"src/**/*.ts\""
   },
-  "keywords": [],
+  "keywords": [
+    "express",
+    "typescript",
+    "nodejs",
+    "mongodb",
+    "jwt",
+    "bcrypt",
+    "nodemailer"
+  ],
   "author": "Göktuğ Ceyhan",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
