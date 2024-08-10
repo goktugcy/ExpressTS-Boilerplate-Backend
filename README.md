@@ -1,4 +1,10 @@
 # ExpressTS Boilerplate
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/goktugcy/ExpressTS-Boilerplate-Backend/blob/main/LICENSE)
+![GitHub forks](https://img.shields.io/github/forks/goktugcy/ExpressTS-Boilerplate-Backend?style=flat)
+![GitHub Created At](https://img.shields.io/github/created-at/goktugcy/ExpressTS-Boilerplate-Backend)
+![GitHub Repo stars](https://img.shields.io/github/stars/goktugcy/ExpressTS-Boilerplate-Backend?style=flat)
+
 
 This project is a basic template built using Express.js and TypeScript. It includes the following features:
 
@@ -28,13 +34,24 @@ Install the required dependencies:
 npm install
 ```
 
+Go to https://goktugceyhan.dev/playground or https://playcode.io/javascript and create a random value by pasting the code below. Then add this generated value to the SECRET_KEY field in your env file.
+```javascript
+ function generateSecureHexString(size) {
+      const array = new Uint8Array(size / 2);
+      window.crypto.getRandomValues(array);
+      return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase();
+    }
+
+    const hexString = generateSecureHexString(45);
+    console.log('Generated Secure Hex String:', hexString);
+```
 Start the project:
 
 ```bash
 npm run dev
 ```
 
-Open your browser and go to http://localhost:5002 to see the "Hello World" message.
+Open your browser and go to http://localhost:8003 to see the "Hello World" message.
 
 ## Routes and Authentication
 
@@ -56,4 +73,7 @@ The example authentication system in this boilerplate demonstrates the basic flo
 
 3. **Protected Routes**: The boilerplate includes of a protected routes that requires authentication. The `authenticateMiddleware` middleware is applied to this route to ensure that only authenticated users can access it. If a user is not authenticated, they will receive a 401 Unauthorized response.
 
- 
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
+
